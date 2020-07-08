@@ -11,7 +11,7 @@ Use keyring to set  username and password for mongo db
 python  
 import keyring 
 >>> keyring.set_password("CryptoUsersService", "USERNAME", "CryptoUsersService")
->>> keyring.set_password("CryptoUsersService", "CryptoUsersService", "DaPStREA2!")
+>>> keyring.set_password("CryptoUsersService", "CryptoUsersService", "")
 
 
 
