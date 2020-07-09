@@ -1,7 +1,7 @@
 import json
 import pymongo
-from CryptoModel.data_access.helpers import get_url
-from CryptoModel.config import configure_app
+from CryptoUsersService.data_access.helpers import get_url
+from CryptoUsersService.config import configure_app
 import pytest
 import mock
 

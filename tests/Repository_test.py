@@ -1,65 +1,19 @@
 import mock
 from bson import ObjectId
 from pymongo.errors import ServerSelectionTimeoutError
-from CryptoUsersService.model import user_channel, user_transaction, user_notification
-from CryptoUsersService.model.coinmarket import prices
-from CryptoUsersService.model.fixer import exchange_rates
-from config import configure_app
+from CryptoUsersService.model.cryptostore import user_channel, user_transaction, user_notification
+from CryptoUsersService.config import configure_app
 from CryptoUsersService.data_access.Repository import Repository
 import pytest
 from CryptoUsersService.data_access import helpers
-from tests.helpers import insert_prices_record, insert_exchange_record
 
 
 @pytest.fixture(scope='module')
 def mock_log():
-    with mock.patch("Logger.logger.log_error"
+    with mock.patch("CryptoUsersService.helpers.log_error"
                     ) as _mock:
         _mock.return_value = True
         yield _mock
-
-
-def test_fetch_symbol_rates():
-    config = configure_app()
-    repo = Repository(config, mock_log)
-    helpers.do_connect(config)
-    prices.objects.all().delete()
-    insert_prices_record()
-    objs = repo.fetch_symbol_rates()
-    assert (len(objs.rates) == 100)
-    assert(objs.rates['BTC'].price ==    8101.799293468747)
-
-
-def test_fetch_exchange_rates():
-    config = configure_app()
-    repo = Repository(config, mock_log)
-    helpers.do_connect(config)
-    exchange_rates.objects.all().delete()
-    insert_exchange_record()
-    objs = repo.fetch_latest_exchange_rates_to_date('1900-01-01')
-    assert (len(objs) == 0)
-    objs = repo.fetch_latest_exchange_rates_to_date('2020-07-04')
-    assert (len(objs) == 1)
-    objs = repo.fetch_latest_exchange_rates_to_date('2020-07-03')
-    assert (len(objs) == 1)
-    assert (objs[0].rates.AED == 4.127332)
-    objs = repo.fetch_latest_exchange_rates_to_date('2020-07-02')
-    assert (len(objs) == 0)
-
-
-def test_fetch_prices_and_symbols():
-    config = configure_app()
-    repo = Repository(config, mock_log)
-    helpers.do_connect(config)
-    prices.objects.all().delete()
-    insert_prices_record()
-    objs = repo.fetch_latest_prices_to_date('2020-07-03')  # bound case : timestamp is saved as string so it cant find
-    # it because  of the time stuff (either+1 day?)
-    assert (len(objs) == 0)
-    objs = repo.fetch_latest_prices_to_date('2020-07-04')
-    assert (len(objs) == 1)
-    symbols = repo.fetch_symbols()
-    assert (len(symbols) == 100)
 
 
 def test_insert_user_channel():
@@ -72,10 +26,10 @@ def test_insert_user_channel():
 
 
 def test_log_when_do_connect_raises_exception(mock_log):
-    with mock.patch("CryptoModel.data_access.helpers.do_connect"
+    with mock.patch("CryptoUsersService.data_access.helpers.do_connect"
                     ) as _mock:
         _mock.side_effect = ServerSelectionTimeoutError("hi")
-        with mock.patch("Logger.logger.log_error") as log:
+        with mock.patch("CryptoUsersService.helpers.log_error") as log:
             with pytest.raises(ServerSelectionTimeoutError):
                 repo = Repository(configure_app(), mock_log)
                 repo.insert_user_channel(1, "telegram", 1)

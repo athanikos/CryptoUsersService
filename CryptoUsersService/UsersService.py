@@ -1,9 +1,7 @@
 from datetime import datetime
 from flask import jsonify
-from CryptoUsersService.calculator.BalanceCalculator import BalanceCalculator
 from CryptoUsersService.data_access.Repository import Repository
 DATE_FORMAT = "%Y-%m-%d"
-import jsonpickle
 from CryptoUsersService.helpers import log_error
 
 
@@ -11,19 +9,6 @@ class UsersService:
 
     def __init__(self, config):
         self.repo = Repository(config, log_error)
-
-    def compute(self, user_id):
-        now = datetime.today().strftime(DATE_FORMAT)
-        bc = BalanceCalculator(self.repo.fetch_transactions(user_id),
-                               self.repo.fetch_symbol_rates().rates,
-                               self.repo.fetch_latest_exchange_rates_to_date(now),
-                               "EUR"  # fix get from user_settings
-                               )
-        return jsonpickle.encode(bc.compute(user_id, now))
-
-    def get_prices(self, items_count):
-        now = datetime.today().strftime(DATE_FORMAT)
-        return jsonify(self.repo.fetch_latest_prices_to_date(before_date=now).to_json())
 
     def get_transactions(self, user_id):
         repo = Repository(self.configuration, log_error)
