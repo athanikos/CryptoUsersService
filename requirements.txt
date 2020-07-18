@@ -1,3 +1,5 @@
+KafkaHelper-athanikos==0.1.0
+Crypto-athanikos==0.0.1
 config
 mock==3.0.5
 Flask==1.1.1
@@ -13,4 +15,3 @@ setuptools~=40.8.0
 pymongo~=3.10.1
 Werkzeug~=1.0.1
 jsonpickle
-KafkaHelper-athanikos==0.0.7

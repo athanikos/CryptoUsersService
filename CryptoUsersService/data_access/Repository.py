@@ -1,10 +1,12 @@
 from datetime import datetime
-from CryptoUsersService.model.readonly import SymbolRates
 from mongoengine import Q
-from CryptoUsersService.model.fixer import exchange_rates
-from CryptoUsersService.model.cryptostore import user_notification, user_channel, user_transaction, user_settings
 from CryptoUsersService.data_access import helpers
 from CryptoUsersService.helpers import if_none_raise, if_none_raise_with_id
+from CryptoModel.coinmarket import prices
+from CryptoModel.fixer import exchange_rates
+from CryptoModel.cryptostore import user_notification, user_channel, user_transaction
+from CryptoModel import helpers
+from CryptoModel import SymbolRates
 DATE_FORMAT = "%Y-%m-%d"
 
 
@@ -42,7 +44,7 @@ class Repository:
         return helpers.server_time_out_wrapper(self, self.do_fetch_notifications, items_count)
 
     def fetch_transactions(self, user_id):
-        return helpers.server_time_out_wrapper(self,self.do_fetch_transactions,  user_id)
+        return helpers.server_time_out_wrapper(self, self.do_fetch_transactions, user_id)
 
     def insert_transaction(self, user_id, volume, symbol, value, price, currency, date, source):
         return helpers.server_time_out_wrapper(self, self.do_insert_transaction, user_id, volume, symbol,
@@ -55,9 +57,10 @@ class Repository:
                                                notify_times,
                                                notify_every_in_seconds, symbol, channel_type)
 
-    def update_notification(self, id, user_id, user_name, user_email, condition_value, field_name, operator, notify_times,
+    def update_notification(self, id, user_id, user_name, user_email, condition_value, field_name, operator,
+                            notify_times,
                             notify_every_in_seconds, symbol, channel_type):
-        return helpers.server_time_out_wrapper(self, self.do_update_notification, id,  user_id, user_name, user_email,
+        return helpers.server_time_out_wrapper(self, self.do_update_notification, id, user_id, user_name, user_email,
                                                condition_value, field_name, operator,
                                                notify_times,
                                                notify_every_in_seconds, symbol, channel_type)
@@ -97,7 +100,7 @@ class Repository:
         helpers.do_connect(self.configuration)
         return user_notification.objects()[:items_count]
 
-    def do_fetch_transactions(self, user_id ):
+    def do_fetch_transactions(self, user_id):
         helpers.do_connect(self.configuration)
         return user_transaction.objects(Q(user_id=user_id))
 
@@ -148,11 +151,11 @@ class Repository:
         helpers.do_connect(self.configuration)
         us = user_settings()
         us.userId = user_id
-        us.preferred_currency= preferred_currency
+        us.preferred_currency = preferred_currency
         us.save()
         return user_settings.objects(id=us.id).first()
 
-    def do_update_user_settings(self, id, user_id,  preferred_currency):
+    def do_update_user_settings(self, id, user_id, preferred_currency):
         helpers.do_connect(self.configuration)
         us = user_settings.objects(id=id).first()
         if_none_raise_with_id(id, us)
@@ -180,7 +183,7 @@ class Repository:
                                notify_times,
                                notify_every_in_seconds, symbol, channel_type):
         helpers.do_connect(self.configuration)
-        un = user_notification.objects(id = id ).first()
+        un = user_notification.objects(id=id).first()
         if_none_raise_with_id(id, un)
         un.id = id
         un.userId = user_id

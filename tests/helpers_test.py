@@ -1,4 +1,4 @@
-from CryptoUsersService.model.helpers import from_dict
+from CryptoModel.model.helpers import from_dict
 
 
 def test_from_dict():

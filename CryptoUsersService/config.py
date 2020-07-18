@@ -5,8 +5,8 @@ from werkzeug.utils import import_string
 DB = "crypto"
 PORT = 27017
 MONGO_IP = "134.122.79.43"
-KAFKA_BROKERS = "localhost:9092"
-
+KAFKA_BROKERS = "192.168.1.57:9092"
+TRANSACTIONS_TOPIC_NAME = "transactions_2"
 
 class BaseConfig(object):
     DEBUG = False
@@ -18,7 +18,7 @@ class BaseConfig(object):
     PASSWORD = ""
     LOGS_PATH = '../CryptoModel/logs/CryptoModel.log'
     KAFKA_BROKERS = KAFKA_BROKERS
-
+    TRANSACTIONS_TOPIC_NAME = "transactions_2"
 
 class DevelopmentConfig(BaseConfig):
     DEBUG = True
@@ -30,7 +30,7 @@ class DevelopmentConfig(BaseConfig):
     PASSWORD = "test"
     LOGS_PATH = '../CryptoModel/logs/CryptoModel.log'
     KAFKA_BROKERS = KAFKA_BROKERS
-
+    TRANSACTIONS_TOPIC_NAME = "transactions_2"
 
 class ProductionConfig(BaseConfig):
     DEBUG = False
@@ -42,7 +42,7 @@ class ProductionConfig(BaseConfig):
     PASSWORD = ""
     LOGS_PATH = '../CryptoUsersService/logs/CryptoUsersService.log'
     KAFKA_BROKERS = KAFKA_BROKERS
-
+    TRANSACTIONS_TOPIC_NAME = "transactions_2"
 
 config = {
     "development": "CryptoUsersService.config.DevelopmentConfig",

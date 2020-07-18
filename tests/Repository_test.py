@@ -1,7 +1,7 @@
 import mock
 from bson import ObjectId
 from pymongo.errors import ServerSelectionTimeoutError
-from CryptoUsersService.model.cryptostore import user_channel, user_transaction, user_notification
+from CryptoModel.model.cryptostore import user_channel, user_transaction, user_notification
 from CryptoUsersService.config import configure_app
 from CryptoUsersService.data_access.Repository import Repository
 import pytest
