@@ -1,8 +1,10 @@
-from datetime import datetime
 from flask import jsonify
-from CryptoUsersService.data_access.Repository import Repository
-DATE_FORMAT = "%Y-%m-%d"
+from CryptoUsersService.data_access import Repository
 from CryptoUsersService.helpers import log_error
+from kafkaHelper.kafkaHelper import produce_with_action
+
+DATE_FORMAT = "%Y-%m-%d"
+CURRENCY = "EUR"
 
 
 class UsersService:
@@ -16,12 +18,16 @@ class UsersService:
 
     def insert_transaction(self, user_id, volume, symbol, value, price, date, source):
         repo = Repository(self.configuration, log_error)
-        return repo.insert_transaction(user_id=user_id, volume=volume, symbol=symbol, value=value, price=price,
-                                       date=date, source=source, currency="EUR")  # fix currency
+        trans = repo.insert_transaction(user_id=user_id, volume=volume, symbol=symbol, value=value, price=price,
+                                        date=date, source=source, currency=CURRENCY)
+
+        produce_with_action(broker_names=self.configuration.KAFKA_BROKERS, topic="transactions"
+                            , data_item=trans, id=trans.id)
+        return trans
 
     def update_transaction(self, id, user_id, volume, symbol, value, price, date, source):
         repo = Repository(self.configuration, log_error)
-        return repo.update_transaction(id, user_id, volume, symbol, value, price, "EUR", date, source)  # fix
+        return repo.update_transaction(id, user_id, volume, symbol, value, price, CURRENCY, date, source)
 
     def get_user_notifications(self, items_count):
         repo = Repository(self.configuration)

@@ -1,5 +1,3 @@
-from mongoengine import Document
-
 
 class SymbolRates:
     def __init__(self, date):
