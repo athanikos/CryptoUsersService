@@ -1,11 +1,11 @@
 import mock
 from bson import ObjectId
 from pymongo.errors import ServerSelectionTimeoutError
-from CryptoModel.model.cryptostore import user_channel, user_transaction, user_notification
 from CryptoUsersService.config import configure_app
 from CryptoUsersService.data_access.Repository import Repository
 import pytest
 from CryptoUsersService.data_access import helpers
+from cryptomodel.cryptomodel import *
 
 
 @pytest.fixture(scope='module')
@@ -32,7 +32,7 @@ def test_log_when_do_connect_raises_exception(mock_log):
         with mock.patch("CryptoUsersService.helpers.log_error") as log:
             with pytest.raises(ServerSelectionTimeoutError):
                 repo = Repository(configure_app(), mock_log)
-                repo.insert_user_channel(1, "telegram", 1)
+                repo.insert_user_channel(1, "telegram", chat_id="1")
             mock_log.assert_called()
 
 

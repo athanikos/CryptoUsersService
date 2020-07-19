@@ -1,4 +1,4 @@
-#!/home/nikos/PycharmProjects/CryptoUsersService/venv/bin/python3
+#!/home/nikos/PycharmProjects/CryptoUsersService/venv/bin/python
 # -*- coding: utf-8 -*-
 import re
 import sys

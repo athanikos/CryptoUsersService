@@ -21,9 +21,8 @@ class UsersService:
         repo = Repository(self.repo.configuration, log_error)
         trans = repo.insert_transaction(user_id=user_id, volume=volume, symbol=symbol, value=value, price=price,
                                         date=date, source=source, currency=CURRENCY)
-
         produce_with_action(broker_names=self.repo.configuration.KAFKA_BROKERS, topic=self.repo.configuration.TRANSACTIONS_TOPIC_NAME
-                            , data_item=jsonpickle.encode(trans))
+                            , data_item=trans)
         return trans
 
     def update_transaction(self, id, user_id, volume, symbol, value, price, date, source):

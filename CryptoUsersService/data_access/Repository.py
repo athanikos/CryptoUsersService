@@ -2,11 +2,10 @@ from datetime import datetime
 from mongoengine import Q
 from CryptoUsersService.data_access import helpers
 from CryptoUsersService.helpers import if_none_raise, if_none_raise_with_id
-from CryptoModel.coinmarket import prices
-from CryptoModel.fixer import exchange_rates
-from CryptoModel.cryptostore import user_notification, user_channel, user_transaction
-from CryptoModel import helpers
-from CryptoModel import SymbolRates
+from cryptomodel.fixer import exchange_rates
+from cryptomodel.cryptostore import user_notification, user_channel, user_transaction, operation_type
+from cryptomodel.readonly import SymbolRates
+from cryptomodel.cryptostore import user_settings
 DATE_FORMAT = "%Y-%m-%d"
 
 
@@ -115,8 +114,13 @@ class Repository:
         trans.date = date
         trans.currency = currency
         trans.source = source
+        trans.operation = 'added'
+        trans.source_id = '666f6f2d6261722d71757578'
         trans.save()
-        return user_transaction.objects(id=trans.id).first()
+        trans = user_transaction.objects(id=trans.id).first()
+        trans.source_id = str(trans.id)
+        trans.save()
+        return trans
 
     def do_insert_notification(self, user_id, user_name, user_email, condition_value, field_name, operator,
                                notify_times,

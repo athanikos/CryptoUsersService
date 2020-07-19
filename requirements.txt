@@ -1,5 +1,5 @@
-KafkaHelper-athanikos==0.1.0
-Crypto-athanikos==0.0.1
+KafkaHelper-athanikos==0.1.1
+cryptomodel-athanikos==2.1.0
 config
 mock==3.0.5
 Flask==1.1.1
