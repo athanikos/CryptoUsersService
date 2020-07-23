@@ -2,7 +2,7 @@ import os
 from keyring import get_password
 from werkzeug.utils import import_string
 
-DB = "cryptoUsersService"
+DB = "CryptoUsersService"
 PORT = 27017
 MONGO_IP = "134.122.79.43"
 KAFKA_BROKERS = "localhost:9092"
