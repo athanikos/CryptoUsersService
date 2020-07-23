@@ -1,0 +1,11 @@
+{
+        "user_id":1,
+        "volume":100,
+        "symbol":"BTC",
+        "value":900000,
+        "price":92200,
+        "date":"2020-06-20",
+        "source":"kraken",
+        "source_id":"",
+        "operation":"added"
+}

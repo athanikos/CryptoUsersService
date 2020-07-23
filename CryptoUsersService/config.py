@@ -2,10 +2,10 @@ import os
 from keyring import get_password
 from werkzeug.utils import import_string
 
-DB = "crypto"
+DB = "cryptoUsersService"
 PORT = 27017
 MONGO_IP = "134.122.79.43"
-KAFKA_BROKERS = "192.168.1.57:9092"
+KAFKA_BROKERS = "localhost:9092"
 TRANSACTIONS_TOPIC_NAME = "transactions_2"
 
 class BaseConfig(object):

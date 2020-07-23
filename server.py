@@ -25,16 +25,20 @@ def get_prices():
           methods=['GET'])
 def get_transactions(user_id):
     ts = UsersService(configure_app())
-    return ts.get_transactions(request.json['user_id'])
+    return ts.get_transactions(user_id)
 
 
 @bp.route("/api/v1/transaction",
           methods=['POST'])
 def insert_transaction():
     ts = UsersService(configure_app())
+
+    if request.json['source_id'] == '':
+        sc_id = None
+
     un = ts.insert_transaction(request.json['user_id'], request.json['volume'], request.json['symbol'],
                                 request.json['value'], request.json['price'], request.json['date'],
-                                request.json['source'],  request.json['source_id'], 'Added')
+                                request.json['source'],  sc_id, 'Added')
     return jsonify(un.to_json())
 
 
