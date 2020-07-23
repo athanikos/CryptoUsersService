@@ -8,6 +8,7 @@ MONGO_IP = "134.122.79.43"
 KAFKA_BROKERS = "localhost:9092"
 TRANSACTIONS_TOPIC_NAME = "transactions_2"
 
+
 class BaseConfig(object):
     DEBUG = False
     TESTING = False
@@ -19,6 +20,7 @@ class BaseConfig(object):
     LOGS_PATH = '../CryptoModel/logs/CryptoModel.log'
     KAFKA_BROKERS = KAFKA_BROKERS
     TRANSACTIONS_TOPIC_NAME = "transactions_2"
+
 
 class DevelopmentConfig(BaseConfig):
     DEBUG = True
@@ -32,6 +34,7 @@ class DevelopmentConfig(BaseConfig):
     KAFKA_BROKERS = KAFKA_BROKERS
     TRANSACTIONS_TOPIC_NAME = "transactions_2"
 
+
 class ProductionConfig(BaseConfig):
     DEBUG = False
     TESTING = False
@@ -43,6 +46,7 @@ class ProductionConfig(BaseConfig):
     LOGS_PATH = '../CryptoUsersService/logs/CryptoUsersService.log'
     KAFKA_BROKERS = KAFKA_BROKERS
     TRANSACTIONS_TOPIC_NAME = "transactions_2"
+
 
 config = {
     "development": "CryptoUsersService.config.DevelopmentConfig",
