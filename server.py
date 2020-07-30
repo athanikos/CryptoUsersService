@@ -35,6 +35,8 @@ def insert_transaction():
 
     if request.json['source_id'] == '':
         sc_id = None
+    else:
+        sc_id = request.json['source_id']
 
     un = ts.insert_transaction(request.json['user_id'], request.json['volume'], request.json['symbol'],
                                 request.json['value'], request.json['price'], request.json['date'],
@@ -74,20 +76,26 @@ def get_user_notifications():
     return uns.get_user_notifications(10)
 
 
-@bp.route("/api/v1/user-notifications",
+@bp.route("/api/v1/user-notification",
           methods=['POST'])
 def insert_notification():
     uns = UsersService(configure_app())
-    un = uns.insert_user_notification(request.json['user_id'],
-                                      request.json['user_name'],
-                                      request.json['user_email'],
-                                      request.json['condition_value'],
-                                      request.json['condition_value'],
-                                      request.json['operator'],
-                                      request.json['notify_times'],
-                                      request.json['notify_every_in_seconds'],
-                                      request.json['symbol'],
-                                      request.json['channel_type']
+
+    if request.json['source_id'] == '':
+        sc_id = None
+    else:
+        sc_id = request.json['source_id']
+    un = uns.insert_user_notification(
+                                      user_id=request.json['user_id'],
+                                      user_name=request.json['user_name'],
+                                      user_email=request.json['user_email'],
+                                      expression_to_evaluate=request.json['expression_to_evaluate'],
+                                      check_every_seconds=request.json['check_every_seconds'],
+                                      check_times=request.json['check_times'],
+                                      channel_type=request.json['channel_type'],
+                                      source_id= sc_id,
+                                      is_active=request.json['is_active'],
+                                      fields_to_send =request.json['fields_to_send']
                                       )
     return jsonify(un.to_json())
 
@@ -95,8 +103,13 @@ def insert_notification():
 @bp.route("/api/v1/user-channel",
           methods=['POST'])
 def insert_user_channel():
+    if request.json['source_id'] == '':
+        sc_id = None
+    else:
+        sc_id = request.json['source_id']
+
     uns = UsersService(configure_app())
-    un = uns.insert_user_channel(request.json['user_id'], request.json['channel_type'], request.json['chat_id'])
+    un = uns.insert_user_channel(request.json['user_id'], request.json['channel_type'], request.json['chat_id'], sc_id)
 
     return jsonify(un.to_json())
 

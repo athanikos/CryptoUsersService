@@ -6,7 +6,8 @@ DB = "CryptoUsersService"
 PORT = 27017
 MONGO_IP = "134.122.79.43"
 KAFKA_BROKERS = "localhost:9092"
-TRANSACTIONS_TOPIC_NAME = "transactions_2"
+TRANSACTIONS_TOPIC_NAME = "transactions"
+USER_NOTIFICATIONS_TOPIC_NAME = "user_notifications"
 
 
 class BaseConfig(object):
@@ -19,7 +20,8 @@ class BaseConfig(object):
     PASSWORD = ""
     LOGS_PATH = '../CryptoModel/logs/CryptoModel.log'
     KAFKA_BROKERS = KAFKA_BROKERS
-    TRANSACTIONS_TOPIC_NAME = "transactions_2"
+    TRANSACTIONS_TOPIC_NAME = TRANSACTIONS_TOPIC_NAME
+    USER_NOTIFICATIONS_TOPIC_NAME = USER_NOTIFICATIONS_TOPIC_NAME
 
 
 class DevelopmentConfig(BaseConfig):
@@ -32,7 +34,8 @@ class DevelopmentConfig(BaseConfig):
     PASSWORD = "test"
     LOGS_PATH = '../CryptoModel/logs/CryptoModel.log'
     KAFKA_BROKERS = KAFKA_BROKERS
-    TRANSACTIONS_TOPIC_NAME = "transactions_2"
+    TRANSACTIONS_TOPIC_NAME = TRANSACTIONS_TOPIC_NAME
+    USER_NOTIFICATIONS_TOPIC_NAME = USER_NOTIFICATIONS_TOPIC_NAME
 
 
 class ProductionConfig(BaseConfig):
@@ -45,7 +48,8 @@ class ProductionConfig(BaseConfig):
     PASSWORD = ""
     LOGS_PATH = '../CryptoUsersService/logs/CryptoUsersService.log'
     KAFKA_BROKERS = KAFKA_BROKERS
-    TRANSACTIONS_TOPIC_NAME = "transactions_2"
+    TRANSACTIONS_TOPIC_NAME = TRANSACTIONS_TOPIC_NAME
+    USER_NOTIFICATIONS_TOPIC_NAME = USER_NOTIFICATIONS_TOPIC_NAME
 
 
 config = {

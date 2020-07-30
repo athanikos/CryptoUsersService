@@ -1,0 +1,15 @@
+{
+    "user_id":1,
+    "user_name":"1",
+    "user_email":"sdsds",
+    "is_active":1,
+    "expression_to_evaluate":"sdds",
+    "check_every_seconds":1,
+    "check_times":"1",
+    "is_active":true,
+    "channel_type":"btc",
+    "fields_to_send":"fields",
+    "operation":"Added",
+    "source_id":""
+}
+
