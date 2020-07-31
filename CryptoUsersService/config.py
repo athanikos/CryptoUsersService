@@ -2,7 +2,7 @@ import os
 from keyring import get_password
 from werkzeug.utils import import_string
 
-DB = "CryptoUsersService"
+DB = "users_service"
 PORT = 27017
 MONGO_IP = "127.0.0.1"
 KAFKA_BROKERS = "localhost:9092"
@@ -25,12 +25,13 @@ class BaseConfig(object):
     USER_NOTIFICATIONS_TOPIC_NAME = USER_NOTIFICATIONS_TOPIC_NAME
     USER_SETTINGS_TOPIC_NAME = USER_SETTINGS_TOPIC_NAME
 
+
 class DevelopmentConfig(BaseConfig):
     DEBUG = True
     TESTING = True
     SERVERNAME = "localhost"
     PORT = PORT
-    DATABASE = "test_crypto"
+    DATABASE = DB
     USERNAME = "test"
     PASSWORD = "test"
     LOGS_PATH = '../CryptoModel/logs/CryptoModel.log'
@@ -67,4 +68,5 @@ def configure_app():
     cfg = import_string(config_name)()
     cfg.USERNAME = get_password('CryptoUsersService', 'USERNAME')
     cfg.PASSWORD = get_password('CryptoUsersService', cfg.USERNAME)
+    print(cfg.DATABASE)
     return cfg

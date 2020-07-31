@@ -76,8 +76,8 @@ def get_user_notifications():
     return uns.get_user_notifications(10)
 
 
-@bp.route("/api/v1/user-settings/<int:user_id>/",
-          methods=['POST'])
+@bp.route("/api/v1/user-settings/<int:user_id>",
+          methods=['GET'])
 def get_user_settings(user_id):
     uns = UsersService(configure_app())
     return uns.get_user_settings(user_id)

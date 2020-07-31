@@ -5,7 +5,7 @@ from bson import ObjectId
 
 from server import configure_app, create_app
 from cryptodataaccess.helpers import do_connect, log_error
-from cryptomodel.cryptostore import user_transaction
+from cryptomodel.cryptostore import user_transaction, user_settings
 
 
 @pytest.fixture(scope='module')
@@ -37,3 +37,21 @@ def test_fetch_transactions(test_client):
     response = test_client.get('/api/v1/transactions/1')
     data_json2 = json.loads(response.get_json(silent=True, force=True))
     assert response.status_code == 200
+
+
+def test_fetch_user_settings_by_user_id(test_client):
+    config = configure_app()
+    do_connect(config)
+    user_settings.objects.all().delete()
+    us =user_settings()
+    us.preferred_currency ="EUR"
+    us.source_id = ObjectId('666f6f2d6261722d71757578')
+    us.user_id = 1
+    us.save(force_insert=True, validate=False, clean=False)
+    response = test_client.get('/api/v1/user-settings/1')
+    data_json2 = json.dumps(response.get_json(silent=True, force=True))
+    assert response.status_code == 200
+
+
+
+
