@@ -22,6 +22,10 @@ class UsersService:
     def get_transactions(self, user_id):
         return jsonify(self.trans_repo.get_transactions(user_id).to_json())
 
+    def get_transactions_before_date(self, user_id, date):
+        return jsonify(self.trans_repo.get_transactions_before_date(user_id, date).to_json())
+
+
     def insert_transaction(self, user_id, volume, symbol, value, price, date, source, source_id, operation):
         trans = self.trans_repo.add_transaction(user_id=user_id, volume=volume, symbol=symbol, value=value,
                                                 price=price,
@@ -52,10 +56,17 @@ class UsersService:
         un = self.users_repo.add_notification(user_id, user_name, user_email, expression_to_evaluate,
                                               check_every_seconds,
                                               check_times, is_active, channel_type, fields_to_send, source_id)
+        self.users_repo.commit()
         produce(broker_names=self.users_store.configuration.KAFKA_BROKERS,
                 topic=self.users_store.configuration.USER_NOTIFICATIONS_TOPIC_NAME
                 , data_item=jsonpickle.encode(un))
         return un
 
-    def insert_user_channel(self, user_id, channel_type, chat_id, source_id):
-        return self.users_repo.add_user_channel(user_id, channel_type, chat_id, source_id)
+    def insert_user_settings(self, user_id, preferred_currency, source_id):
+        us = self.users_repo.add_user_settings(user_id=user_id, preferred_currency=preferred_currency,
+                                               source_id=source_id)
+        self.users_repo.commit()
+        produce(broker_names=self.users_store.configuration.KAFKA_BROKERS,
+                topic=self.users_store.configuration.USER_SETTINGS_TOPIC_NAME
+                , data_item=jsonpickle.encode(us))
+        return us

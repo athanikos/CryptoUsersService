@@ -1,4 +1,3 @@
-import mock
 import pytest
 import json
 
@@ -7,6 +6,7 @@ from bson import ObjectId
 from server import configure_app, create_app
 from cryptodataaccess.helpers import do_connect, log_error
 from cryptomodel.cryptostore import user_transaction
+
 
 @pytest.fixture(scope='module')
 def test_client():
@@ -32,10 +32,8 @@ def test_fetch_transactions(test_client):
     ut.currency = "EUR"
     ut.source = "kraken"
     ut.operation = "Added"
-    ut.source_id=ObjectId('666f6f2d6261722d71757578')
-    ut.save(force_insert=True ,validate = False,clean=False)
+    ut.source_id = ObjectId('666f6f2d6261722d71757578')
+    ut.save(force_insert=True, validate=False, clean=False)
     response = test_client.get('/api/v1/transactions/1')
     data_json2 = json.loads(response.get_json(silent=True, force=True))
     assert response.status_code == 200
-
-
