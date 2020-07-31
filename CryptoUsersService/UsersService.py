@@ -25,7 +25,6 @@ class UsersService:
     def get_transactions_before_date(self, user_id, date):
         return jsonify(self.trans_repo.get_transactions_before_date(user_id, date).to_json())
 
-
     def insert_transaction(self, user_id, volume, symbol, value, price, date, source, source_id, operation):
         trans = self.trans_repo.add_transaction(user_id=user_id, volume=volume, symbol=symbol, value=value,
                                                 price=price,
@@ -50,6 +49,9 @@ class UsersService:
 
     def get_user_channels(self, user_id, channel_type):
         return jsonify(self.trans_repo.fetch_user_channels(user_id, channel_type).to_json())
+
+    def get_user_settings(self, user_id):
+        return jsonify(self.users_repo.get_user_settings(user_id).to_json())
 
     def insert_user_notification(self, user_id, user_name, user_email, expression_to_evaluate, check_every_seconds,
                                  check_times, is_active, channel_type, fields_to_send, source_id):
