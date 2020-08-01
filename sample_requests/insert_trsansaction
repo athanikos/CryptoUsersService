@@ -3,9 +3,10 @@
         "volume":100,
         "symbol":"BTC",
         "value":900000,
-        "price":92200,
+        "price":9000,
         "date":"2020-06-20",
         "source":"kraken",
-        "source_id":"",
-        "operation":"added"
+        "source_id" : "",
+        "type" : "TRADE",
+        "order_type":"BUY"
 }

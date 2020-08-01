@@ -40,7 +40,7 @@ def insert_transaction():
 
     un = ts.insert_transaction(request.json['user_id'], request.json['volume'], request.json['symbol'],
                                request.json['value'], request.json['price'], request.json['date'],
-                               request.json['source'], sc_id, 'Added')
+                               request.json['source'], sc_id, request.json['type'], request.json['order_type'] )
     return jsonify(un.to_json())
 
 
@@ -51,7 +51,7 @@ def update_transaction():
     un = ts.update_transaction(request.json['id'],
                                request.json['user_id'], request.json['volume'], request.json['symbol'],
                                request.json['value'], request.json['price'], request.json['date'],
-                               request.json['source'], request.json['source_id'], 'Modified')
+                               request.json['source'], request.json['source_id'], request.json['type'], request.json['order_type'] )
     return jsonify(un.to_json())
 
 

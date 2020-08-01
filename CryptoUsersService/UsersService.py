@@ -25,10 +25,12 @@ class UsersService:
     def get_transactions_before_date(self, user_id, date):
         return jsonify(self.trans_repo.get_transactions_before_date(user_id, date).to_json())
 
-    def insert_transaction(self, user_id, volume, symbol, value, price, date, source, source_id, operation):
+    def insert_transaction(self, user_id, volume, symbol, value, price, date, source, source_id, type,
+                           order_type
+                           ):
         trans = self.trans_repo.add_transaction(user_id=user_id, volume=volume, symbol=symbol, value=value,
-                                                price=price,
-                                                date=date, source=source, currency=CURRENCY, source_id=source_id)
+                                                price=price, source=source, currency=CURRENCY, source_id=source_id,
+                                                transaction_type = type, order_type= order_type, date=date)
 
         self.trans_repo.commit()
 
@@ -37,9 +39,10 @@ class UsersService:
                 , data_item=jsonpickle.encode(trans))
         return trans
 
-    def update_transaction(self, id, user_id, volume, symbol, value, price, date, source, source_id, operation):
+    def update_transaction(self, id, user_id, volume, symbol, value, price, date, source, source_id,  type,
+                           order_type ):
         trans = self.trans_repo.add_transaction(id, user_id, volume, symbol, value, price, CURRENCY, date, source,
-                                                source_id=source_id)
+                                                source_id=source_id,transaction_type=type, order_type=order_type )
 
         self.trans_repo.commit()
         return trans
