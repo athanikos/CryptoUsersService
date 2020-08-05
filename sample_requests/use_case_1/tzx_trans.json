@@ -1,0 +1,12 @@
+{
+        "user_id":1,
+        "volume":31.182,
+        "symbol":"TZX",
+        "value":176.08408,
+        "price":2.44,
+        "date":"2020-07-15",
+        "source":"kraken",
+        "source_id" : "",
+        "type" : "TRADE",
+        "order_type":"BUY"
+}

@@ -1,0 +1,12 @@
+{
+        "user_id":1,
+        "volume":6420,
+        "symbol":"TRX",
+        "value":"104.004",
+        "price":".0162",
+        "date":"2020-07-15",
+        "source":"kraken",
+        "source_id" : "",
+        "type" : "TRADE",
+        "order_type":"BUY"
+}

@@ -1,0 +1,12 @@
+{
+        "user_id":1,
+        "volume":1010.8,
+        "symbol":"XLM",
+        "value":227.25,
+        "price":",.225",
+        "date":"2020-08-01",
+        "source":"kraken",
+        "source_id" : "",
+        "type" : "TRADE",
+        "order_type":"BUY"
+}

@@ -1,0 +1,12 @@
+{
+        "user_id":1,
+        "volume":2076,
+        "symbol":"ADA",
+        "value":"242.89",
+        "price":"11.7",
+        "date":"2020-07-21",
+        "source":"kraken",
+        "source_id" : "",
+        "type" : "TRADE",
+        "order_type":"BUY"
+}
