@@ -9,7 +9,7 @@
     "is_active":true,
     "channel_type":"btc",
     "fields_to_send":"fields",
-    "operation":"Added",
+    "operation":"ADDED",
     "source_id":""
 }
 
