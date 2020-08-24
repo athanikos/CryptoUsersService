@@ -7,9 +7,8 @@ PORT = 27017
 MONGO_IP = "127.0.0.1"
 KAFKA_BROKERS = "localhost:9092"
 TRANSACTIONS_TOPIC_NAME = "transactions"
-USER_NOTIFICATIONS_TOPIC_NAME = "user_notifications"
 USER_SETTINGS_TOPIC_NAME = "user_settings"
-
+USER_NOTIFICATIONS_TOPIC_NAME = "user_notifications"
 
 class BaseConfig(object):
     DEBUG = False

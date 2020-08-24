@@ -96,13 +96,14 @@ def insert_notification():
         user_id=request.json['user_id'],
         user_name=request.json['user_name'],
         user_email=request.json['user_email'],
-        expression_to_evaluate=request.json['expression_to_evaluate'],
-        check_every_seconds=request.json['check_every_seconds'],
-        check_times=request.json['check_times'],
+        check_every=request.json['check_every'],
+        start_date=request.json['start_date'],
+        end_date=request.json['end_date'],
+        notification_type =request.json['notification_type'],
         channel_type=request.json['channel_type'],
         source_id=sc_id,
         is_active=request.json['is_active'],
-        fields_to_send=request.json['fields_to_send']
+        threshold_value=request.json['threshold_value']
     )
     return jsonify(un.to_json())
 

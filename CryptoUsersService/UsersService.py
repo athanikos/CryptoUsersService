@@ -56,11 +56,12 @@ class UsersService:
     def get_user_settings(self, user_id):
         return jsonify(self.users_repo.get_user_settings(user_id).to_json())
 
-    def insert_user_notification(self, user_id, user_name, user_email, expression_to_evaluate, check_every_seconds,
-                                 check_times, is_active, channel_type, fields_to_send, source_id):
-        un = self.users_repo.add_notification(user_id, user_name, user_email, expression_to_evaluate,
-                                              check_every_seconds,
-                                              check_times, is_active, channel_type, fields_to_send, source_id)
+    def insert_user_notification(self, user_id, user_name, user_email, start_date, end_date,
+                                 check_every, is_active, channel_type, notification_type, threshold_value, source_id):
+        un = self.users_repo.add_notification(user_id= user_id, user_name= user_name, user_email= user_email, start_date= start_date, end_date= end_date,
+                                              check_every=check_every,
+                                              is_active=is_active, channel_type=channel_type,notification_type=notification_type,
+                                              threshold_value=threshold_value, source_id=source_id)
         self.users_repo.commit()
         produce(broker_names=self.users_store.configuration.KAFKA_BROKERS,
                 topic=self.users_store.configuration.USER_NOTIFICATIONS_TOPIC_NAME
