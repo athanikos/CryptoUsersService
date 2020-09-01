@@ -1,5 +1,3 @@
-from datetime import datetime
-
 import pytest
 import json
 
@@ -66,7 +64,6 @@ def test_insert_user_notification(test_client):
                                         'user_id': 2,
                                         'user_name': '1',
                                         'user_email': 'sdsds',
-                                        'is_active': 1,
                                         'start_date': '2020-06-20',
                                         'end_date': '2020-06-20',
                                         'check_every': '00:01',

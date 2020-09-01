@@ -1,7 +1,7 @@
 import jsonpickle
 from flask import jsonify
 from CryptoUsersService.helpers import log_error
-from kafkaHelper.kafkaHelper import produce
+from kafkaHelper.kafkaHelper import produce, produce_with_key
 from cryptodataaccess.Transactions.TransactionRepository import TransactionRepository
 from cryptodataaccess.Transactions.TransactionMongoStore import TransactionMongoStore
 from cryptodataaccess.Users.UsersRepository import UsersRepository
@@ -58,14 +58,18 @@ class UsersService:
 
     def insert_user_notification(self, user_id, user_name, user_email, start_date, end_date,
                                  check_every, is_active, channel_type, notification_type, threshold_value, source_id):
-        un = self.users_repo.add_notification(user_id= user_id, user_name= user_name, user_email= user_email, start_date= start_date, end_date= end_date,
+        un = self.users_repo.add_notification(user_id= user_id, user_name= user_name, user_email= user_email,
+                                              start_date= start_date, end_date= end_date,
                                               check_every=check_every,
-                                              is_active=is_active, channel_type=channel_type,notification_type=notification_type,
+                                              is_active=is_active, channel_type=channel_type,
+                                              notification_type=notification_type,
                                               threshold_value=threshold_value, source_id=source_id)
         self.users_repo.commit()
-        produce(broker_names=self.users_store.configuration.KAFKA_BROKERS,
-                topic=self.users_store.configuration.USER_NOTIFICATIONS_TOPIC_NAME
-                , data_item=jsonpickle.encode(un))
+        produce_with_key(
+                key = str(user_id).encode('utf-8'),
+                broker_names=self.users_store.configuration.KAFKA_BROKERS,
+                topic=self.users_store.configuration.EVENT_STORE_TOPIC_NAME,
+                data_item=jsonpickle.encode(un))
         return un
 
     def insert_user_settings(self, user_id, preferred_currency, source_id):

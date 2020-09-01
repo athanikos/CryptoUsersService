@@ -6,9 +6,8 @@ DB = "users_service"
 PORT = 27017
 MONGO_IP = "127.0.0.1"
 KAFKA_BROKERS = "localhost:9092"
-TRANSACTIONS_TOPIC_NAME = "transactions"
-USER_SETTINGS_TOPIC_NAME = "user_settings"
-USER_NOTIFICATIONS_TOPIC_NAME = "user_notifications"
+EVENT_STORE_TOPIC_NAME = "events"
+
 
 class BaseConfig(object):
     DEBUG = False
@@ -20,9 +19,7 @@ class BaseConfig(object):
     PASSWORD = ""
     LOGS_PATH = '../CryptoModel/logs/CryptoModel.log'
     KAFKA_BROKERS = KAFKA_BROKERS
-    TRANSACTIONS_TOPIC_NAME = TRANSACTIONS_TOPIC_NAME
-    USER_NOTIFICATIONS_TOPIC_NAME = USER_NOTIFICATIONS_TOPIC_NAME
-    USER_SETTINGS_TOPIC_NAME = USER_SETTINGS_TOPIC_NAME
+    EVENT_STORE_TOPIC_NAME = EVENT_STORE_TOPIC_NAME
 
 
 class DevelopmentConfig(BaseConfig):
@@ -35,9 +32,7 @@ class DevelopmentConfig(BaseConfig):
     PASSWORD = "test"
     LOGS_PATH = '../CryptoModel/logs/CryptoModel.log'
     KAFKA_BROKERS = KAFKA_BROKERS
-    TRANSACTIONS_TOPIC_NAME = TRANSACTIONS_TOPIC_NAME
-    USER_NOTIFICATIONS_TOPIC_NAME = USER_NOTIFICATIONS_TOPIC_NAME
-    USER_SETTINGS_TOPIC_NAME = USER_SETTINGS_TOPIC_NAME
+    EVENT_STORE_TOPIC_NAME = EVENT_STORE_TOPIC_NAME
 
 
 class ProductionConfig(BaseConfig):
@@ -50,9 +45,7 @@ class ProductionConfig(BaseConfig):
     PASSWORD = ""
     LOGS_PATH = '../CryptoUsersService/logs/CryptoUsersService.log'
     KAFKA_BROKERS = KAFKA_BROKERS
-    TRANSACTIONS_TOPIC_NAME = TRANSACTIONS_TOPIC_NAME
-    USER_NOTIFICATIONS_TOPIC_NAME = USER_NOTIFICATIONS_TOPIC_NAME
-    USER_SETTINGS_TOPIC_NAME = USER_SETTINGS_TOPIC_NAME
+    EVENT_STORE_TOPIC_NAME = EVENT_STORE_TOPIC_NAME
 
 
 config = {
@@ -67,5 +60,4 @@ def configure_app():
     cfg = import_string(config_name)()
     cfg.USERNAME = get_password('CryptoUsersService', 'USERNAME')
     cfg.PASSWORD = get_password('CryptoUsersService', cfg.USERNAME)
-    print(cfg.DATABASE)
     return cfg
