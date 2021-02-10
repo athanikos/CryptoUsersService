@@ -4,7 +4,7 @@
 
 
 ### Crypto Users Service
-An service for managing crypto user data 
+A service for managing crypto user data 
 Transactions /notifications / Settings 
 
 
