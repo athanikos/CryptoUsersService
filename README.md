@@ -13,11 +13,14 @@ Refer to CryptoStore repository for mongo installation & configuration
 Use keyring to set  username and password for mongo db  
 
 ### capabilities 
-User Transaction Management 
-User Notification Management 
-User Settings Management 
-    
+get prices 
+insert, update, get  transaction 
+get balance  (compute)
+get user-notification 
+get user-settings
+insert user-channel 
+insert user-settings 
 
 
-notifies some message 
-    uses user_notifications
+
+   
