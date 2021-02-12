@@ -14,13 +14,13 @@ Use keyring to set  username and password for mongo db
 
 ### capabilities 
 get prices  
-insert, update, get  transaction     
+insert, update, get  transaction  
 get balance  (compute)  
-get user-notification    
-get user-settings   
-insert user-channel     
-insert user-settings    
-
+get user-notification   
+get user-settings 
+insert user-channel   
+insert user-settings  
+  
 
 
    
