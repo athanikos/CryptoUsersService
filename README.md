@@ -44,6 +44,8 @@ pip install -r requirements.txt
 gunicorn --bind 0.0.0.0:5000 "wsgi:create_app()"    
 
 
+keyring.set_password("CryptoCalculatorService","USERNAME","crypto")
+keyring.set_password("CryptoCalculatorService","crypto","eneter the PASSWORD")
 
 
 
