@@ -1,0 +1,14 @@
+[Unit]
+Description=uWSGI instance to serve UsersService
+After=network.target
+
+[Service]
+User=CryptoUsersService
+Group=www-data
+WorkingDirectory=/home/crypto/CryptoUsersService
+Environment="PATH=/home/crypto/CryptoUsersService/CryptoUsersServiceenv/bin"
+ExecStart=/home/crypto/CryptoUsersService/CryptoUsersServiceEnv/bin/uwsgi --ini CryptoUsersService.ini
+
+[Install]
+WantedBy=multi-user.target
+
