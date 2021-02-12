@@ -20,7 +20,30 @@ get user-notification
 get user-settings 
 insert user-channel   
 insert user-settings  
-  
 
 
-   
+
+### resources 
+WSGI server -  https://www.fullstackpython.com/wsgi-servers.html
+deploy - https://www.digitalocean.com/community/tutorials/how-to-serve-flask-applications-with-gunicorn-and-nginx-on-ubuntu-18-04
+
+
+
+#### deployment instructions
+
+sudo apt update
+sudo apt install python3-pip python3-dev build-essential libssl-dev libffi-dev python3-setuptools
+sudo apt install python3-venv
+python3.7 -m venv UsersServiceEnv
+source UsersServiceEnv/bin/activate
+pip install wheel
+pip install gunicorn flask
+git clone https://github.com/athanikos/CryptoUsersService
+cd CryptoUsersService/
+pip install --upgrade pip
+pip install -r requirements.txt 
+gunicorn --bind 0.0.0.0:5000 "wsgi:create_app()"
+
+
+
+
