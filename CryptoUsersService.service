@@ -7,7 +7,7 @@ User=CryptoUsersService
 Group=www-data
 WorkingDirectory=/home/crypto/CryptoUsersService
 Environment="PATH=/home/crypto/CryptoUsersService/CryptoUsersServiceEnv/bin"
-ExecStart=/home/crypto/CryptoUsersService/CryptoUsersServiceEnv/bin/uwsgi --ini CryptoUsersService.ini
+ExecStart=/usr/local/bin/bin/gunicorn --workers 3 --bind unix:CryptoUsersService.sock -m 007 wsgi:app
 
 [Install]
 WantedBy=multi-user.target
