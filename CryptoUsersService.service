@@ -6,7 +6,7 @@ After=network.target
 User=CryptoUsersService
 Group=www-data
 WorkingDirectory=/home/crypto/CryptoUsersService
-Environment="PATH=/home/crypto/CryptoUsersService/CryptoUsersServiceenv/bin"
+Environment="PATH=/home/crypto/CryptoUsersService/CryptoUsersServiceEnv/bin"
 ExecStart=/home/crypto/CryptoUsersService/CryptoUsersServiceEnv/bin/uwsgi --ini CryptoUsersService.ini
 
 [Install]
