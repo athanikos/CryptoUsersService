@@ -33,8 +33,9 @@ sudo mkhomedir_helper admin
 sudo apt update     
 sudo apt install python3-pip python3-dev build-essential libssl-dev libffi-dev python3-setuptools
 sudo apt install python3-venv   
-python3.7 -m venv CryptoUsersServiceEnv     
-source CryptoUsersServiceEnv/bin/activate       
+sudo python3.8 -m venv CryptoUsersServiceEnv     
+source CryptoUsersServiceEnv/bin/activate     
+sudo chown -R admin:admin /home/admin/CryptoUsersServiceEnv
 pip install wheel   
 pip install gunicorn flask      
 git clone https://github.com/athanikos/CryptoUsersService       
@@ -42,8 +43,15 @@ cd CryptoUsersService/
 pip install --upgrade pip       
 pip install -r requirements.txt     
 gunicorn --bind 0.0.0.0:5000 "wsgi:create_app()"    
-sudo chown crypto:crypto /home/crypto/CryptoUsersService
+sudo chown admin:admin /home/admin/CryptoUsersService
+test unicorn runs with  
+gunicorn --bind 0.0.0.0:5000 wsgi:create_app
+user running system service needs to be the one used for the commands above else permission denied 
 
+
+### usefull links while trubleshooting deploying 
+https://askubuntu.com/questions/760896/how-can-i-fix-apt-error-w-target-packages-is-configured-multiple-times
+https://github.com/microsoft/vscode-python/issues/14327
 
 
 

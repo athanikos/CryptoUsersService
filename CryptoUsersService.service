@@ -3,12 +3,18 @@ Description=uWSGI instance to serve CryptoUsersService
 After=network.target
 
 [Service]
-User=CryptoUsersService
-Group=www-data
-WorkingDirectory=/home/crypto/CryptoUsersService
-Environment="PATH=/home/crypto/CryptoUsersService/CryptoUsersServiceEnv/bin"
-ExecStart=/usr/local/bin/gunicorn --workers 3 --bind unix:CryptoUsersService.sock -m 007 wsgi:app
+User=nikos
+Group=nikos
+WorkingDirectory=/home/nikos/CryptoUsersService
+Environment="PATH=/home/nikos/CryptoUsersServiceEnv/bin"
+ExecStart=/home/nikos/.local/bin/gunicorn  --workers 3 --bind unix:CryptoUsersService.sock -m 007 wsgi:create_app
+
+
 
 [Install]
 WantedBy=multi-user.target
+
+
+
+
 
