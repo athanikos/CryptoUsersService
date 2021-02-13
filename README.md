@@ -49,7 +49,14 @@ gunicorn --bind 0.0.0.0:5000 wsgi:create_app
 
 user running system service needs to be the one used for the commands above else permission denied 
 
-todo nginx 
+install  nginx 
+https://www.digitalocean.com/community/tutorials/how-to-install-nginx-on-ubuntu-18-04
+
+sudo apt update
+sudo apt install nginx
+sudo ufw app list
+sudo ufw allow 'Nginx HTTP'
+sudo ufw status
 
 
 
