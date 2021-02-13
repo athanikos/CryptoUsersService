@@ -46,7 +46,12 @@ gunicorn --bind 0.0.0.0:5000 "wsgi:create_app()"
 sudo chown admin:admin /home/admin/CryptoUsersService
 test unicorn runs with  
 gunicorn --bind 0.0.0.0:5000 wsgi:create_app
+
 user running system service needs to be the one used for the commands above else permission denied 
+
+todo nginx 
+
+
 
 
 ### usefull links while trubleshooting deploying 
