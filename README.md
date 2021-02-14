@@ -58,16 +58,12 @@ cd /etc/nginx/sites-available
 sudo mkdir CryptoUsersService
 sudo ln -s /etc/nginx/sites-available/CryptoUsersService /etc/nginx/sites-enabled/
 sudo systemctl restart nginx
-call vis client at http://0.0.0.0:80/api/v1/user-notification
+sudo systemctl status  nginx
+call via httpclient @ http://0.0.0.0:80/api/v1/user-notification
 
-make sure mongo is running 
-sudo service mongod status 
-start if not 
+####make sure mongo is running and start if not 
+sudo service mongod status
 sudo service mongod start  
-
-
-
-
 
 
 ### useful links while troubleshooting deployment  
