@@ -46,25 +46,35 @@ gunicorn --bind 0.0.0.0:5000 "wsgi:create_app()"
 sudo chown admin:admin /home/admin/CryptoUsersService
 test unicorn runs with  
 gunicorn --bind 0.0.0.0:5000 wsgi:create_app
-
 user running system service needs to be the one used for the commands above else permission denied 
-
 install  nginx 
 https://www.digitalocean.com/community/tutorials/how-to-install-nginx-on-ubuntu-18-04
-
 sudo apt update
 sudo apt install nginx
 sudo ufw app list
 sudo ufw allow 'Nginx HTTP'
 sudo ufw status
+cd /etc/nginx/sites-available
+sudo mkdir CryptoUsersService
+sudo ln -s /etc/nginx/sites-available/CryptoUsersService /etc/nginx/sites-enabled/
+sudo systemctl restart nginx
+call vis client at http://0.0.0.0:80/api/v1/user-notification
+
+make sure mongo is running 
+sudo service mongod status 
+start if not 
+sudo service mongod start  
 
 
 
 
-### usefull links while trubleshooting deploying 
+
+
+### useful links while troubleshooting deployment  
 https://askubuntu.com/questions/760896/how-can-i-fix-apt-error-w-target-packages-is-configured-multiple-times
 https://github.com/microsoft/vscode-python/issues/14327
-
+https://www.digitalocean.com/community/questions/conflicting-server-name-mydomain-com-on-0-0-0-0-80-ignored-nginx-error-log-ubuntu-20-04
+https://www.digitalocean.com/community/questions/wsgi-nginx-error-permission-denied-while-connecting-to-upstream
 
 
 
