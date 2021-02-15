@@ -1,6 +1,9 @@
 import os
 from keyring import get_password
 from werkzeug.utils import import_string
+import keyring.backend
+from keyrings.alt.file import PlaintextKeyring
+
 
 DB = "users_service"
 PORT = 27017
@@ -56,8 +59,10 @@ config = {
 
 
 def configure_app():
+    keyring.set_keyring(PlaintextKeyring())
     config_name = os.getenv('FLASK_ENV', 'CryptoUsersService.config.DevelopmentConfig')
     cfg = import_string(config_name)()
     cfg.USERNAME = get_password('CryptoUsersService', 'USERNAME')
+    print(cfg.USERNAME)
     cfg.PASSWORD = get_password('CryptoUsersService', cfg.USERNAME)
     return cfg

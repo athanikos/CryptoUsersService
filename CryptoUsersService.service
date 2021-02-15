@@ -3,10 +3,10 @@ Description=uWSGI instance to serve CryptoUsersService
 After=network.target
 
 [Service]
-User=nikos
-Group=nikos
-WorkingDirectory=/home/nikos/CryptoUsersService
-Environment="PATH=/home/nikos/CryptoUsersServiceEnv/bin"
+User=crypto
+Group=crypto
+WorkingDirectory=/opt/cryptoUsersService/CryptoUsersService
+Environment="PATH=/opt/cryptoUsersService/CryptoUsersServiceEnv/bin"
 ExecStart=/home/nikos/.local/bin/uwsgi   --ini CryptoUsersService.ini
 
 

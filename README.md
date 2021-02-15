@@ -26,10 +26,10 @@ WSGI server -  https://www.fullstackpython.com/wsgi-servers.html
 deploy - https://www.digitalocean.com/community/tutorials/how-to-serve-flask-applications-with-gunicorn-and-nginx-on-ubuntu-18-04   
 
 #### deployment instructions (in venv)
-sudo useradd admin       
-sudo passwd admin  
-cd /home    
-sudo mkhomedir_helper admin    
+sudo useradd crypto        
+sudo passwd crypto 
+cd /opt     
+mkdir /opt/cryptoUsersService/
 sudo apt update     
 sudo apt install python3-pip python3-dev build-essential libssl-dev libffi-dev python3-setuptools
 sudo apt install python3-venv   
@@ -42,10 +42,21 @@ git clone https://github.com/athanikos/CryptoUsersService
 cd CryptoUsersService/      
 pip install --upgrade pip       
 pip install -r requirements.txt     
-gunicorn --bind 0.0.0.0:5000 "wsgi:create_app()"    
-sudo chown admin:admin /home/admin/CryptoUsersService
-test unicorn runs with  
-gunicorn --bind 0.0.0.0:5000 wsgi:create_app
+
+
+sudo ufw allow 4999
+
+> python3   
+> imnport keyring    
+> from keyrings.alt.file import PlaintextKeyring    
+> keyring.set_keyring(PlaintextKeyring())   
+> keyring.set_password('CryptoUsersService', 'USERNAME', 'gunicorn user name ') 
+> keyring.set_password('CryptoUsersService', 'someusername', 'somepassword')    
+
+#notice the parethesis in app since it is a method 
+gunicorn --bind 0.0.0.0:4999 "wsgi:app()"
+
+
 user running system service needs to be the one used for the commands above else permission denied 
 install  nginx 
 https://www.digitalocean.com/community/tutorials/how-to-install-nginx-on-ubuntu-18-04
@@ -61,16 +72,39 @@ sudo systemctl restart nginx
 sudo systemctl status  nginx
 call via httpclient @ http://0.0.0.0:80/api/v1/user-notification
 
+
+
+Edit ~/.local/share/python_keyring/keyringrc.cfg:
+[backend]
+default-keyring=keyrings.alt.file.PlaintextKeyring
+
+
+
 ####make sure mongo is running and start if not 
 sudo service mongod status
 sudo service mongod start  
 
 
 ### useful links while troubleshooting deployment  
-https://askubuntu.com/questions/760896/how-can-i-fix-apt-error-w-target-packages-is-configured-multiple-times
 https://github.com/microsoft/vscode-python/issues/14327
 https://www.digitalocean.com/community/questions/conflicting-server-name-mydomain-com-on-0-0-0-0-80-ignored-nginx-error-log-ubuntu-20-04
 https://www.digitalocean.com/community/questions/wsgi-nginx-error-permission-denied-while-connecting-to-upstream
+https://stackoverflow.com/questions/36488688/nginx-upstream-prematurely-closed-connection-while-reading-response-header-from
+https://www.datadoghq.com/blog/nginx-502-bad-gateway-errors-gunicorn/
+https://stackoverflow.com/questions/39188136/running-flask-with-gunicorn-raises-typeerror-index-takes-0-positional-argumen
+https://www.digitalocean.com/community/tutorials/how-to-deploy-python-wsgi-apps-using-gunicorn-http-server-behind-nginx
+https://lnx.azurewebsites.net/please-enter-password-for-encrypted-keyring-when-running-python-script-on-ubuntu/
+
+
+
+
+
+#### health checks 
+sudo systemctl restart nginx
+sudo systemctl restart mongod 
+sudo systemctl restart CryptoUsersService 
+
+
 
 
 
