@@ -44,17 +44,25 @@ pip install --upgrade pip
 pip install -r requirements.txt     
 
 
-sudo ufw allow 4999
-
-> python3   
-> imnport keyring    
-> from keyrings.alt.file import PlaintextKeyring    
-> keyring.set_keyring(PlaintextKeyring())   
-> keyring.set_password('CryptoUsersService', 'USERNAME', 'gunicorn user name ') 
-> keyring.set_password('CryptoUsersService', 'someusername', 'somepassword')    
-
 #notice the parethesis in app since it is a method 
 gunicorn --bind 0.0.0.0:4999 "wsgi:app()"
+
+
+sudo ufw allow 4999
+
+need to su with the user specified in CryptoSuersService.service 
+and set the USERNAME and password for the mongo db
+ python3   
+ import keyring    
+ from keyrings.alt.file import PlaintextKeyring    
+ keyring.set_keyring(PlaintextKeyring())   
+ keyring.set_password('CryptoUsersService', 'USERNAME', 'someusername') 
+ keyring.set_password('CryptoUsersService', 'someusername', 'somapass')    
+
+in case errors not allowed when seting keyring create a /.local  folder and give access to user 
+sudo mkdir /.local
+sudo chown -R "$USER":"$USER" /.local  
+
 
 
 user running system service needs to be the one used for the commands above else permission denied 
@@ -63,14 +71,24 @@ https://www.digitalocean.com/community/tutorials/how-to-install-nginx-on-ubuntu-
 sudo apt update
 sudo apt install nginx
 sudo ufw app list
-sudo ufw allow 'Nginx HTTP'
+sudo ufw allow 4999 
 sudo ufw status
+
 cd /etc/nginx/sites-available
-sudo mkdir CryptoUsersService
+sudo nano CryptoUsersService
+paste the contents of CryptoUsersService.nginx file 
 sudo ln -s /etc/nginx/sites-available/CryptoUsersService /etc/nginx/sites-enabled/
-sudo systemctl restart nginx
-sudo systemctl status  nginx
-call via httpclient @ http://0.0.0.0:80/api/v1/user-notification
+
+nginx sets :
+
+server {
+    listen 4999;
+    location / {
+        include proxy_params;
+        proxy_pass http://unix:/opt/cryptoUsersService/CryptoUsersService/CryptoUsersService.sock;
+    }
+}
+
 
 
 
@@ -80,9 +98,23 @@ default-keyring=keyrings.alt.file.PlaintextKeyring
 
 
 
+sudo nano /etc/systemd/system/CryptoUsersService.service
+paste in that file the contents of CryptoUsersService.service
+
+apt-get install build-essential python-dev
+apt-get uwsgi
+which uwsgi 
+paste the path into the CryptoUsersService.service section of uwsgi 
+
+
+sudo chown -R crypto:crypto /opt/cryptoUsersService/
+
+
 ####make sure mongo is running and start if not 
 sudo service mongod status
 sudo service mongod start  
+
+
 
 
 ### useful links while troubleshooting deployment  
