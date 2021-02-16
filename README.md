@@ -30,14 +30,16 @@ sudo useradd crypto
 sudo passwd crypto 
 cd /opt     
 mkdir /opt/cryptoUsersService/
+chown -R crypto:crypto cryptoUsersService/
 sudo apt update     
 sudo apt install python3-pip python3-dev build-essential libssl-dev libffi-dev python3-setuptools
 sudo apt install python3-venv   
+cd opt/cryptoUsersService
 sudo python3.8 -m venv CryptoUsersServiceEnv     
 source CryptoUsersServiceEnv/bin/activate     
-sudo chown -R admin:admin /home/admin/CryptoUsersServiceEnv
 pip install wheel   
 pip install gunicorn flask      
+cd /opt/cryptoUsersService
 git clone https://github.com/athanikos/CryptoUsersService       
 cd CryptoUsersService/      
 pip install --upgrade pip       
