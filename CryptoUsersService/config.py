@@ -63,6 +63,5 @@ def configure_app():
     config_name = os.getenv('FLASK_ENV', 'CryptoUsersService.config.DevelopmentConfig')
     cfg = import_string(config_name)()
     cfg.USERNAME = get_password('CryptoUsersService', 'USERNAME')
-    print(cfg.USERNAME)
     cfg.PASSWORD = get_password('CryptoUsersService', cfg.USERNAME)
     return cfg
