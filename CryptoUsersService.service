@@ -5,9 +5,9 @@ After=network.target
 [Service]
 User=nikos
 Group=nikos
-WorkingDirectory=/home/nikos/CryptoUsersService
-Environment="PATH=/home/nikos/CryptoUsersServiceEnv/bin"
-ExecStart=/home/nikos/.local/bin/gunicorn  --bind unix:CryptoUsersService.sock   "wsgi:app()"
+WorkingDirectory=/opt/cryptoUsersService/CryptoUsersService
+Environment="PATH=/opt/cryptoUsersService/CryptoUsersServiceEnv/bin"
+ExecStart=/opt/cryptoUsersService/CryptoUsersServiceEnv/bin/gunicorn  --bind unix:CryptoUsersService.sock   "wsgi:app()"
 
 
 

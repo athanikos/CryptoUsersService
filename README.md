@@ -12,20 +12,13 @@ Transactions /notifications / Settings
 Refer to CryptoStore repository for mongo installation & configuration     
 Use keyring to set  username and password for mongo db  
 
-#### capabilities 
-get prices  
-insert, update, get  transaction  
-get balance  (compute)  
-get user-notification   
-get user-settings 
-insert user-channel   
-insert user-settings  
 
-#### resources 
-WSGI server -  https://www.fullstackpython.com/wsgi-servers.html    
-deploy - https://www.digitalocean.com/community/tutorials/how-to-serve-flask-applications-with-gunicorn-and-nginx-on-ubuntu-18-04   
+#### deployment instructions    (ubuntu 20.04)
+based on https://www.digitalocean.com/community/tutorials/how-to-serve-flask-applications-with-gunicorn-and-nginx-on-ubuntu-18-04   
 
-#### deployment instructions (in venv)
+##### Add user , setup env and download code base
+```shell
+
 sudo useradd crypto        
 sudo passwd crypto 
 cd /opt     
@@ -41,48 +34,105 @@ pip install wheel
 pip install gunicorn flask      
 cd /opt/cryptoUsersService
 git clone https://github.com/athanikos/CryptoUsersService       
-cd CryptoUsersService/      
+cd CryptoUsersService/
+chown -R crypto:crypto /opt/cryptoUsersService/
 pip install --upgrade pip       
 pip install -r requirements.txt     
+```
+
+set user name and password for mongo authentication 
+```shell
+python3   
+import keyring    
+from keyrings.alt.file import PlaintextKeyring    
+keyring.set_keyring(PlaintextKeyring())   
+keyring.set_password('CryptoUsersService', 'USERNAME', 'someusername') 
+keyring.set_password('CryptoUsersService', 'someusername', 'somapass')    
+```
 
 
-#notice the parethesis in app since it is a method 
+
+open port for service 
+```shell
+sudo ufw allow 4999
+```
+
+##### install & configure mongo 
+follow: https://docs.mongodb.com/manual/tutorial/install-mongodb-on-ubuntu/ 
+
+```mongo shell 
+use admin;
+db.createUser( { user: "", pwd: "", roles: [ { role: "userAdminAnyDatabase", db: "admin" } ] } )
+```
+
+```shell 
+sudo ufw enable 
+sudo ufw allow 27017
+```
+
+``` shell 
+sudo nano /etc/mongod.conf
+```
+
+enter in mongo.conf
+```
+security:   
+    authorization: enabled
+net:
+    port: 27017 
+    bindIp: 127.0.0.1, externalip
+```
+
+enter in mongo shell 
+```
+> use admin 
+switched to db admin
+> db.auth("crypto","crypto")
+db.grantRolesToUser('crypto', [{ role: 'root', db: 'admin' }])
+```
+
+##### java, install kafka 
+install java jre 
+sudo apt-get install openjdk-8-jre
+
+```
+cd  /opt 
+mkdir kafka
+cd kafka
+curl https://ftp.cc.uoc.gr/mirrors/apache/kafka/2.7.0/kafka_2.13-2.7.0.tgz -o kafka_2.13-2.7.0.tgz 
+tar xvzf kafka_2.13-2.7.0.tgz 
+```
+
+
+##### start on boot,  update crontab 
+```
+crontab -e 
+@reboot /opt/kafka/kafka_2.13-2.7.0/bin/zookeeper-server-start.sh /opt/kafka/kafka_2.13-2.7.0/config/zookeeper.properties
+@reboot /opt/kafka/kafka_2.13-2.7.0/bin/kafka-server-start.sh /opt/kafka/kafka_2.13-2.7.0/config/server.properties
+@reboot sudo service mongod restart 
+```
+
+check gunicorn ,  post with some http client to  and verify response
 gunicorn --bind 0.0.0.0:4999 "wsgi:app()"
 
-
-sudo ufw allow 4999
-
-need to su with the user specified in CryptoSuersService.service 
-and set the USERNAME and password for the mongo db
- python3   
- import keyring    
- from keyrings.alt.file import PlaintextKeyring    
- keyring.set_keyring(PlaintextKeyring())   
- keyring.set_password('CryptoUsersService', 'USERNAME', 'someusername') 
- keyring.set_password('CryptoUsersService', 'someusername', 'somapass')    
-
-in case errors not allowed when seting keyring create a /.local  folder and give access to user 
-sudo mkdir /.local
-sudo chown -R "$USER":"$USER" /.local  
-
-
-
-user running system service needs to be the one used for the commands above else permission denied 
-install  nginx 
+##### install  nginx 
+```shell
 https://www.digitalocean.com/community/tutorials/how-to-install-nginx-on-ubuntu-18-04
 sudo apt update
 sudo apt install nginx
 sudo ufw app list
 sudo ufw allow 4999 
 sudo ufw status
+```
 
+```shell
 cd /etc/nginx/sites-available
 sudo nano CryptoUsersService
-paste the contents of CryptoUsersService.nginx file 
-sudo ln -s /etc/nginx/sites-available/CryptoUsersService /etc/nginx/sites-enabled/
+```
 
-nginx sets :
+paste the contents of CryptoUsersService.nginx to  /etc/systemd/system/CryptoUsersService 
 
+``` /etc/systemd/system/CryptoUsersService.service 
 server {
     listen 4999;
     location / {
@@ -90,57 +140,40 @@ server {
         proxy_pass http://unix:/opt/cryptoUsersService/CryptoUsersService/CryptoUsersService.sock;
     }
 }
+```
 
+```shell
+sudo ln -s /etc/nginx/sites-available/CryptoUsersService /etc/nginx/sites-enabled/
+```
 
-
-
-Edit ~/.local/share/python_keyring/keyringrc.cfg:
-[backend]
-default-keyring=keyrings.alt.file.PlaintextKeyring
-
-
-
+```shell
 sudo nano /etc/systemd/system/CryptoUsersService.service
-paste in that file the contents of CryptoUsersService.service
+```
+paste the contents of CryptoUsersService.service
 
-apt-get install build-essential python-dev
-apt-get uwsgi
-which uwsgi 
-paste the path into the CryptoUsersService.service section of uwsgi 
+```shell
+[Unit]
+Description=uWSGI instance to serve CryptoUsersService
+After=network.target
 
+[Service]
+User=nikos
+Group=nikos
+WorkingDirectory=/opt/cryptoUsersService/CryptoUsersService
+Environment="PATH=/opt/cryptoUsersService/CryptoUsersServiceEnv/bin"
+ExecStart=/opt/cryptoUsersService/CryptoUsersServiceEnv/bin/gunicorn  --bind unix:CryptoUsersService.sock   "wsgi:app()"
 
-sudo chown -R crypto:crypto /opt/cryptoUsersService/
-
-
-####make sure mongo is running and start if not 
-sudo service mongod status
-sudo service mongod start  
-
-
-
-
-### useful links while troubleshooting deployment  
-https://github.com/microsoft/vscode-python/issues/14327
-https://www.digitalocean.com/community/questions/conflicting-server-name-mydomain-com-on-0-0-0-0-80-ignored-nginx-error-log-ubuntu-20-04
-https://www.digitalocean.com/community/questions/wsgi-nginx-error-permission-denied-while-connecting-to-upstream
-https://stackoverflow.com/questions/36488688/nginx-upstream-prematurely-closed-connection-while-reading-response-header-from
-https://www.datadoghq.com/blog/nginx-502-bad-gateway-errors-gunicorn/
-https://stackoverflow.com/questions/39188136/running-flask-with-gunicorn-raises-typeerror-index-takes-0-positional-argumen
-https://www.digitalocean.com/community/tutorials/how-to-deploy-python-wsgi-apps-using-gunicorn-http-server-behind-nginx
-https://lnx.azurewebsites.net/please-enter-password-for-encrypted-keyring-when-running-python-script-on-ubuntu/
+[Install]
+WantedBy=multi-user.target
+```
 
 
-
-
-
-#### health checks 
-sudo systemctl restart nginx
-sudo systemctl restart mongod 
-sudo systemctl restart CryptoUsersService 
-
-
-
-
+enable, start check status
+```shell
+sudo systemctl enable CryptoUsersService.service
+sudo systemctl start  CryptoUsersService.service
+sudo systemctl status CryptoUsersService.service
+```
 
 
 
