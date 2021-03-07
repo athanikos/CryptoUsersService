@@ -4,7 +4,7 @@ import json
 from bson import ObjectId
 
 from server import configure_app, create_app
-from cryptodataaccess.helpers import do_connect
+from cryptodataaccess.helpers import do_local_connect
 from cryptomodel.cryptostore import user_transaction, user_settings, user_notification
 
 
@@ -20,7 +20,7 @@ def test_client():
 
 def test_fetch_transactions(test_client):
     config = configure_app()
-    do_connect(config)
+    do_local_connect(config)
     user_transaction.objects.all().delete()
     ut = user_transaction()
     ut.symbol = "BTC"
@@ -41,7 +41,7 @@ def test_fetch_transactions(test_client):
 
 def test_fetch_user_settings_by_user_id(test_client):
     config = configure_app()
-    do_connect(config)
+    do_local_connect(config)
     user_settings.objects.all().delete()
     us = user_settings()
     us.preferred_currency = "EUR"
@@ -55,7 +55,7 @@ def test_fetch_user_settings_by_user_id(test_client):
 
 def test_insert_user_notification(test_client):
     config = configure_app()
-    do_connect(config)
+    do_local_connect(config)
     user_notification.objects.all().delete()
 
     response = test_client.post('/api/v1/user-notification',
