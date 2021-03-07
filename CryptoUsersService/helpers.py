@@ -23,6 +23,13 @@ def log_error(exception, pk_id, web_method_name, cfg):
     logging.error(str(pk_id) + ' ' + str(web_method_name) + ' ' + str(exception))
 
 
+def log_info(message, cfg):
+    logging.basicConfig(filename=cfg.LOGS_PATH, level=logging.INFO, format='%(asctime)s %(levelname)-8s %(message)s')
+    logging.info(message)
+
+
+
+
 def from_dict( _dict, class_name):
     if _dict is None:
         raise TypeError

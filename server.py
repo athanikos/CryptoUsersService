@@ -92,6 +92,7 @@ def insert_notification():
         sc_id = None
     else:
         sc_id = request.json['source_id']
+
     un = uns.insert_user_notification(
         user_id=request.json['user_id'],
         user_name=request.json['user_name'],
@@ -111,12 +112,12 @@ def insert_notification():
 @bp.route("/api/v1/user-channel",
           methods=['POST'])
 def insert_user_channel():
+    uns = UsersService(configure_app())
     if request.json['source_id'] == '':
         sc_id = None
     else:
         sc_id = request.json['source_id']
 
-    uns = UsersService(configure_app())
     un = uns.insert_user_channel(request.json['user_id'], request.json['channel_type'], request.json['chat_id'], sc_id)
 
     return jsonify(un.to_json())
@@ -154,4 +155,4 @@ def handle_error(error):
 
 
 if __name__ == '__main__':
-    create_app().run(port=5002)
+    create_app().run(port=5100)

@@ -15,7 +15,7 @@ Werkzeug~=1.0.1
 jsonpickle
 apscheduler
 cryptomodel-athanikos==2.6.0
-cryptodataaccess-athanikos==0.5.0
+cryptodataaccess-athanikos==0.6.6
 KafkaHelper-athanikos==0.2.6
 kafka-python==2.0.1
 keyrings.alt
